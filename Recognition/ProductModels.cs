@@ -46,8 +46,8 @@ public sealed record MatchCandidate(ProductProfile Profile, double Area, double 
 
 public sealed class AutomationSettings
 {
-    public string Host { get; set; } = "127.0.0.1";
-    public int Port { get; set; } = 5000;
+    public string Host { get; set; } = "192.168.0.1";
+    public int Port { get; set; } = 0;
     public double AreaTolerancePercent { get; set; } = 5;
     public double PerimeterTolerancePercent { get; set; } = 5;
     public double SamplingHz { get; set; } = 1;

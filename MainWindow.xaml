@@ -407,12 +407,24 @@
                             <Button Content="载入样本" Command="{x:Static local:UiCommands.UseProduct}" Padding="8,6" />
                             <Button Content="移出产品库" Command="{x:Static local:UiCommands.RemoveProduct}" Padding="8,6" />
                         </WrapPanel>
-                        <DataGrid x:Name="ProductsGrid" IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False" SelectionMode="Single" SelectionChanged="ProductsGrid_SelectionChanged" RowHeight="36">
+                        <DataGrid x:Name="ProductsGrid" IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False"
+                                  SelectionMode="Single" SelectionChanged="ProductsGrid_SelectionChanged" RowHeight="36"
+                                  CanUserResizeColumns="True" HeadersVisibility="Column" EnableRowVirtualization="True"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                  ScrollViewer.CanContentScroll="True" VirtualizingPanel.ScrollUnit="Pixel">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="产品类型" Binding="{Binding Name}" Width="*" MinWidth="80" />
+                                <DataGridTextColumn Header="产品类型" Binding="{Binding Name}" Width="140" MinWidth="100" />
                                 <DataGridTextColumn Header="面积" Binding="{Binding Area, StringFormat=F1}" Width="80" />
                                 <DataGridTextColumn Header="周长" Binding="{Binding Perimeter, StringFormat=F1}" Width="80" />
-                                <DataGridTextColumn Header="处理算法" Binding="{Binding Algorithms}" Width="200" />
+                                <DataGridTextColumn Header="处理算法" Binding="{Binding Algorithms}" Width="SizeToCells" MinWidth="240">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="TextWrapping" Value="NoWrap" />
+                                            <Setter Property="TextTrimming" Value="None" />
+                                            <Setter Property="ToolTip" Value="{Binding Algorithms}" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
                             </DataGrid.Columns>
                             <DataGrid.RowStyle><Style TargetType="DataGridRow"><Setter Property="ToolTip" Value="{Binding DirectoryPath}" /></Style></DataGrid.RowStyle>
                         </DataGrid>
