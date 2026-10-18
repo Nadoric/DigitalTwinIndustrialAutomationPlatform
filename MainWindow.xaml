@@ -555,6 +555,9 @@
                         <Border Background="White" CornerRadius="12" Padding="32" BorderBrush="#E1E7F0" BorderThickness="1">
                             <StackPanel>
                                 <TextBlock Text="{x:Static platform:PlatformInfo.Name}" FontSize="24" FontWeight="SemiBold" TextWrapping="Wrap" />
+                                <Border Background="#EFF6FF" CornerRadius="6" Padding="12,6" HorizontalAlignment="Left" Margin="0,14,0,0">
+                                    <TextBlock Text="{x:Static platform:PlatformInfo.VersionLabel}" Foreground="#2563EB" FontSize="14" FontWeight="SemiBold" AutomationProperties.Name="软件版本" />
+                                </Border>
                                 <TextBlock Text="统一平台入口 · 独立业务模块 · 持续扩展" Foreground="#7B889B" Margin="0,12,0,24" />
                                 <TextBlock Text="平台目前接入“识别与分拣系统”模块，支持产品图像采集、检测分析和记录导出。后续业务模块通过统一入口接入。" TextWrapping="Wrap" LineHeight="26" />
                                 <Separator Margin="0,22" />

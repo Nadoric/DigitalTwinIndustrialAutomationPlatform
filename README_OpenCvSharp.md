@@ -14,6 +14,36 @@ dotnet run --project .\DigitalTwinIndustrialAutomationPlatform.csproj
 
 源码包不包含 SDK、NuGet 缓存或 bin/obj。新增 `System.Management 10.0.0` 用于 Windows 设备清单；图像依赖 `OpenCvSharp4`、`OpenCvSharp4.runtime.win`、`OpenCvSharp4.WpfExtensions`，均固定为 `4.13.0.20260627`。
 
+## 一键发布与打包
+
+项目根目录新增 `Publish.cmd` 和 `Publish.ps1`，用于生成 Windows x64 自包含免安装包。准备 .NET 10 SDK 和可联网还原 NuGet 的环境。
+
+- **双击 `Publish.cmd`**：默认版本 `1.0.1`，完成后打开输出目录。
+- **命令行指定版本**：在项目目录执行 `Publish.cmd 1.0.1`。
+- **PowerShell 调用**：`powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Publish.ps1 -Version 1.0.1`。执行策略参数仅用于这次进程，不修改系统策略。
+
+脚本自动调用 `dotnet publish`，配置为 Release、win-x64、包含 .NET 运行时、不裁剪、不合并单文件。检查主程序、.NET 运行库、WPF 及 OpenCvSharp 原生库后，把发布目录的全部内容打包到 ZIP 根目录，读取归档内容验证可打开，并生成 SHA-256 校验文件。发布失败或缺少依赖时以非零退出码结束，不生成正式发布 ZIP。
+
+输出结构示例：
+
+```text
+artifacts/
+  v1.0.1_日期时间_随机编号/
+    publish/                          # 完整免安装程序目录
+    DigitalTwinIndustrialAutomationPlatform_v1.0.1_win-x64.zip
+    DigitalTwinIndustrialAutomationPlatform_v1.0.1_win-x64.zip.sha256
+```
+
+每次使用新目录，保留旧发布包，避免上一次的 DLL 混入新包。`artifacts/`、`publish/`、`bin/`、`obj/` 已加入 `.gitignore`，并从项目默认内容扫描中排除发布输出目录。
+
+将生成的 **ZIP**（可附带 `.sha256`）上传到 GitHub Release 的 Assets，版本标签建议与脚本参数一致，例如 `v1.0.1`。脚本只生成软件包，不自动上传或发布 GitHub Release。使用者完整解压 ZIP 后运行 `DigitalTwinIndustrialAutomationPlatform.exe`，保留全部 DLL 和子目录。
+
+发布脚本已用 PowerShell 7 实际完成 Windows x64 交叉发布与 ZIP 打包，并通过归档完整性、SHA-256、发布失败不打包及无效版本号拒绝检查。Windows PowerShell 5.1 与双击 CMD 入口尚需在 Windows 实机验证；生成的 Windows 程序也需实机启动和硬件联调。
+
+## 软件版本
+
+当前版本 **1.0.1**。在左侧“关于”页的平台名称下方显示“软件版本：1.0.1”。版本号读取实际构建的程序集信息，项目默认版本和发布脚本默认版本均为 1.0.1；用 `Publish.cmd 1.0.2` 指定版本后，生成软件的“关于”页将自动显示对应版本，不需要修改界面文字。
+
 ## 平台图标
 
 新增蓝色圆角底、白色立方体线条与青色顶面的简约图标，统一用于 EXE 文件、窗口/任务栏、标题栏和侧边栏。`Assets/PlatformIcon.ico` 包含 16、20、24、32、40、48、64、128、256 像素版本；同目录提供 PNG 和可编辑 SVG。重新构建后程序文件与任务栏使用新图标；已有快捷方式若仍显示旧图标，可重新创建快捷方式。
